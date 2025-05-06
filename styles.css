@@ -14,6 +14,14 @@ button {
     border: none; 
     border-radius: 5px; 
 } 
+button:hover {
+    background-color: lightblue; 
+    color: black;
+}
+button:active {
+    background-color: #3e4e8e;
+    color: aliceblue;
+}
 
 input[type="text"] { 
     width: 88%; 
@@ -24,3 +32,4 @@ input[type="text"] {
     border-radius: 5px; 
     border: 2px solid black; 
 } 
+

@@ -10,34 +10,34 @@
     <table>
         <tr>
             <td colspan="5"> 
-                <input type="text" id="result">                 
+                <input type="text" id="display">                 
             </td> 
         </tr>
         <tr>
-            <td><button value="7">7</button></td> 
-            <td><button value="8">8</button></td> 
-            <td><button value="9">9</button></td> 
-            <td><button value="C">C</button></td>
-            <td><button onclick="clickAllClear()" value="AC">AC</button></td>
+            <td><button onclick="clickNum(7)">7</button></td> 
+            <td><button onclick="clickNum(8)">8</button></td> 
+            <td><button onclick="clickNum(9)">9</button></td> 
+            <td><button onclick="clickClear()">C</button></td>
+            <td><button onclick="clickAllClear()">AC</button></td>
         </tr>
         <tr>
-            <td><button value="4">4</button></td> 
-            <td><button value="5">5</button></td> 
-            <td><button value="6">6</button></td> 
-            <td><button value="*">*</button></td>
-            <td><button value="/">/</button></td> 
+            <td><button onclick="clickNum(4)">4</button></td> 
+            <td><button onclick="clickNum(5)">5</button></td> 
+            <td><button onclick="clickNum(6)">6</button></td> 
+            <td><button onclick="clickOperator('*')">*</button></td>
+            <td><button onclick="clickOperator('/')">/</button></td> 
         </tr>
         <tr>
-            <td><button value="1">1</button></td> 
-            <td><button value="2">2</button></td> 
-            <td><button value="3">3</button></td> 
-            <td><button value="+">+</button></td>
-            <td><button value="-">-</button></td> 
+            <td><button onclick="clickNum(1)">1</button></td> 
+            <td><button onclick="clickNum(2)">2</button></td> 
+            <td><button onclick="clickNum(3)">3</button></td> 
+            <td><button onclick="clickOperator('+')">+</button></td>
+            <td><button onclick="clickOperator('-')">-</button></td> 
         </tr>
         <tr>
-            <td><button value="0">0</button></td> 
-            <td><button value=".">.</button></td> 
-            <td><button value="=">=</button></td> 
+            <td><button onclick="clickNum(0)">0</button></td> 
+            <td><button onclick="clickDot()">.</button></td> 
+            <td><button onclick="clickEquals()">=</button></td> 
             <td><button value="+/-">+/-</button></td> 
             <td><button value="OFF">OFF</button></td> 
         </tr>
