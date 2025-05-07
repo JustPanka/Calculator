@@ -26,6 +26,10 @@ const operate = function(operator, number1, number2) {
         case '*':
             return multiply(number1, number2);
         case '/':
+            // Check for division by zero
+            if (number2 === 0) {
+                return "Cannot divide by zero!";
+            }
             return divide(number1, number2);
         default:
             return 'Invalid operator';
@@ -44,16 +48,18 @@ let number1;
 let operator;
 let number2;
 
-let operatorPushed = false;     // Was the last button an operator?
+let clearScreenAtNextNum = false;     // Clear the screen when a new number is pushed?
 
 function clickNum(num) {
-    if (operatorPushed == false) {
+    // Clear screen and put new number on
+    if (clearScreenAtNextNum === true) {
+        setDisplayValue(num);
+        clearScreenAtNextNum = false;
+
+    // Append number
+    } else {
         let currentVal = getDisplayValue();
         setDisplayValue(currentVal + num);
-
-    } else {
-        setDisplayValue(num);
-        operatorPushed = false;
     }
 };
 
@@ -68,36 +74,50 @@ function clickEquals() {
     number2 = getDisplayValue();
 
     // If user pressed = only
-    if (number1 == undefined && number2 == undefined && operator == undefined) {
-        return;
+    if (number1 == undefined && operator == undefined && number2 == '') {
+        return; 
 
     // Num 1 and operator is present
-    } else if (number1 !== undefined && number2 == undefined && operator !== undefined) {
+    } else if (number1 !== undefined && operator !== undefined && number2 == undefined) {
         return;
 
     // Num 1, num2 and operator is present
-    } else if (number1 !== undefined && number2 !== undefined && operator !== undefined) {
+    } else if (number1 !== undefined && operator !== undefined && number2 !== undefined) {
         let result = operate(operator, number1, number2);
         setDisplayValue(result);
-    }   
+
+        // Prepare for next operation
+        number1 = result;
+        number2 = undefined;
+    }
 };
 
+// TODO NEXT STEP
+// Sequence: 1+3*2 a számológépnek 6-al egyenlő, pedig 8. MIÉRT?
+
+
+
 function clickOperator(op) {
-    number1 = getDisplayValue();
+    if (number1 == undefined) {
+        number1 = getDisplayValue();
+    } else {
+        number2 = getDisplayValue();
+    }
+
     operator = op;
 
     // If user pressed operator only
-    if (number1 == undefined && number2 == undefined && operator !== undefined) {
+    if (number1 == '' && number2 == undefined && operator !== undefined) {
         return;
 
-    // Num 1 and operator is present
-    } else if (number1 !== undefined && number2 == undefined && operator !== undefined) {
-        operatorPushed = true;
-        setDisplayValue(number1);
+    // Num 1 and operator are present
+    } else if (number1 !== '' && number2 == undefined && operator !== undefined) {
+        clearScreenAtNextNum = true;
 
-    // Num 1, num2 and operator is present
-    } else if (number1 !== undefined && number2 !== undefined && operator !== undefined) {
-        setDisplayValue(number2);
+    // Num 1, num2 and operator are present
+    } else if (number1 !== '' && number2 !== undefined && operator !== undefined) {
+        clickEquals();
+        clearScreenAtNextNum = true;
     }
 };
 
