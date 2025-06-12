@@ -92,11 +92,6 @@ function clickEquals() {
     }
 };
 
-// TODO NEXT STEP
-// Sequence: 1+3*2 a számológépnek 6-al egyenlő, pedig 8. MIÉRT?
-
-
-
 function clickOperator(op) {
     if (number1 == undefined) {
         number1 = getDisplayValue();
@@ -119,6 +114,8 @@ function clickOperator(op) {
         clickEquals();
         clearScreenAtNextNum = true;
     }
+
+    // Your calculator should not evaluate more than a single pair of numbers at a time. If a second operator is pushed before =, it should work like evaluate
 };
 
 function clickClear() {
