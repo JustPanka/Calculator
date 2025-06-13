@@ -28,7 +28,7 @@ const operate = function(operator, number1, number2) {
         case '/':
             // Check for division by zero
             if (number2 === 0) {
-                return "Cannot divide by zero!";
+                return "Cannot divide by zero!"; // it is not written anymore
             }
             return divide(number1, number2);
         default:
@@ -37,18 +37,26 @@ const operate = function(operator, number1, number2) {
 };
 
 function getDisplayValue() {
-    return document.getElementById("display").value;
+    var val = document.getElementById("display").value;
+    if (val == '') {
+        return undefined;
+    } else {
+        return val;
+    }
 };
 function setDisplayValue(value) {
+    // round answers with long decimals so that they don’t overflow the display
+    if (value.length > 17) {
+        value = parseFloat(Number(value).toFixed(3));
+    }
     document.getElementById("display").value = value;
 };
-
 
 let number1;
 let operator;
 let number2;
 
-let clearScreenAtNextNum = false;     // Clear the screen when a new number is pushed?
+let clearScreenAtNextNum = false;     // Clear the screen when a new number button is pushed?
 
 function clickNum(num) {
     // Clear screen and put new number on
@@ -59,6 +67,9 @@ function clickNum(num) {
     // Append number
     } else {
         let currentVal = getDisplayValue();
+        if (currentVal == undefined) {
+            currentVal = '';
+        }
         setDisplayValue(currentVal + num);
     }
 };
@@ -74,11 +85,7 @@ function clickEquals() {
     number2 = getDisplayValue();
 
     // If user pressed = only
-    if (number1 == undefined && operator == undefined && number2 == '') {
-        return; 
-
-    // Num 1 and operator is present
-    } else if (number1 !== undefined && operator !== undefined && number2 == undefined) {
+    if (number1 == undefined && operator == undefined) {
         return;
 
     // Num 1, num2 and operator is present
@@ -86,36 +93,35 @@ function clickEquals() {
         let result = operate(operator, number1, number2);
         setDisplayValue(result);
 
-        // Prepare for next operation
-        number1 = result;
+        // When a result is displayed, pressing a new digit should clear the result and start a new calculation instead of appending the digit to the existing result.
+
+        // Prepare for next operation - division with 0 should display error message, not NaN
+        number1 = undefined;
         number2 = undefined;
+        operator = undefined;
     }
 };
 
 function clickOperator(op) {
     if (number1 == undefined) {
         number1 = getDisplayValue();
+        if (number1 == undefined) return;   // User pressed operator with empty screen
+        
+        operator = op;
+        clearScreenAtNextNum = true;
+
     } else {
+        // Make sure that your calculator only runs an operation when supplied with two numbers and an operator by the user. 
         number2 = getDisplayValue();
-    }
-
-    operator = op;
-
-    // If user pressed operator only
-    if (number1 == '' && number2 == undefined && operator !== undefined) {
-        return;
-
-    // Num 1 and operator are present
-    } else if (number1 !== '' && number2 == undefined && operator !== undefined) {
-        clearScreenAtNextNum = true;
-
-    // Num 1, num2 and operator are present
-    } else if (number1 !== '' && number2 !== undefined && operator !== undefined) {
         clickEquals();
+
+        // Prepare for next operator click
+        number1 = getDisplayValue();
+        number2 = undefined;
+        operator = op;
+
         clearScreenAtNextNum = true;
     }
-
-    // Your calculator should not evaluate more than a single pair of numbers at a time. If a second operator is pushed before =, it should work like evaluate
 };
 
 function clickClear() {
