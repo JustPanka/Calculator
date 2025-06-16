@@ -28,7 +28,8 @@ const operate = function(operator, number1, number2) {
         case '/':
             // Check for division by zero
             if (number2 === 0) {
-                return "Cannot divide by zero!"; // it is not written anymore
+                clearScreenAtNextNum = true;     
+                return "Cannot divide by zero!"; 
             }
             return divide(number1, number2);
         default:
@@ -45,8 +46,10 @@ function getDisplayValue() {
     }
 };
 function setDisplayValue(value) {
+    if (typeof value === "string" && value.includes("Cannot divide by zero!")) {
+
     // round answers with long decimals so that they don’t overflow the display
-    if (value.length > 17) {
+    } else if (value.length > 17) {
         value = parseFloat(Number(value).toFixed(3));
     }
     document.getElementById("display").value = value;
@@ -55,10 +58,13 @@ function setDisplayValue(value) {
 let number1;
 let operator;
 let number2;
+let lastButtonType;
 
 let clearScreenAtNextNum = false;     // Clear the screen when a new number button is pushed?
 
 function clickNum(num) {
+    lastButtonType = 'number';
+
     // Clear screen and put new number on
     if (clearScreenAtNextNum === true) {
         setDisplayValue(num);
@@ -75,6 +81,8 @@ function clickNum(num) {
 };
 
 function clickDot() {
+    lastButtonType = 'dot';
+
     let currentVal = getDisplayValue();
     if (!currentVal.includes('.')) {
         setDisplayValue(currentVal + '.');
@@ -82,6 +90,8 @@ function clickDot() {
 };
 
 function clickEquals() {
+    lastButtonType = 'equals';
+
     number2 = getDisplayValue();
 
     // If user pressed = only
@@ -94,15 +104,23 @@ function clickEquals() {
         setDisplayValue(result);
 
         // When a result is displayed, pressing a new digit should clear the result and start a new calculation instead of appending the digit to the existing result.
-
-        // Prepare for next operation - division with 0 should display error message, not NaN
+        // Prepare for next operation
         number1 = undefined;
         number2 = undefined;
         operator = undefined;
+        clearScreenAtNextNum = true;
     }
 };
 
 function clickOperator(op) {
+    // Make sure that your calculator only runs an operation when supplied with two numbers and an operator by the user. 
+    if (lastButtonType == 'operator') {
+        operator = op;
+        return;
+    }
+
+    lastButtonType = 'operator';
+
     if (number1 == undefined) {
         number1 = getDisplayValue();
         if (number1 == undefined) return;   // User pressed operator with empty screen
@@ -111,9 +129,9 @@ function clickOperator(op) {
         clearScreenAtNextNum = true;
 
     } else {
-        // Make sure that your calculator only runs an operation when supplied with two numbers and an operator by the user. 
         number2 = getDisplayValue();
         clickEquals();
+        lastButtonType = 'operator';
 
         // Prepare for next operator click
         number1 = getDisplayValue();
@@ -125,14 +143,25 @@ function clickOperator(op) {
 };
 
 function clickClear() {
+    lastButtonType = 'clear';
     let currentVal = getDisplayValue();
     setDisplayValue(currentVal.slice(0, -1));
 };
 
 function clickAllClear() {
+    lastButtonType = 'allclear';
+
     number1 = undefined;
     number2 = undefined;
     operator = undefined;
     setDisplayValue('');
 };
+
+const values = ['7', '8', '9', 'C', 'AC', '4', '5', '6', '*', '/', '1', '2', '3', '+', '-', '0', '.', '=', 'Shift', 'Enter'];
+
+document.getElementsByTagName("body").onkeypress = function() {keyboardSupport()};
+
+function keyboardSupport() {
+
+}
 
