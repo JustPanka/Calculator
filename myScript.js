@@ -157,11 +157,22 @@ function clickAllClear() {
     setDisplayValue('');
 };
 
-const values = ['7', '8', '9', 'C', 'AC', '4', '5', '6', '*', '/', '1', '2', '3', '+', '-', '0', '.', '=', 'Shift', 'Enter'];
+document.addEventListener('keydown', keyboardSupport);
 
-document.getElementsByTagName("body").onkeypress = function() {keyboardSupport()};
+function keyboardSupport(event) {
+    const key = event.key;
 
-function keyboardSupport() {
-
+    if (key >= '0' && key <= '9') {
+        clickNum(key);
+    } else if (['+', '-', '*', '/'].includes(key)) {
+        clickOperator(key);
+    } else if (key === 'Enter' || key === '=') {
+        clickEquals();
+    } else if (key === 'Backspace' || key === 'C' || key === 'c') {
+        clickClear();
+    } else if (key === 'Delete') {
+        clickAllClear();
+    } else if (key === '.') {
+        clickDot();
+    }
 }
-
